@@ -19,6 +19,10 @@ public class Board : MonoBehaviour
 
     public int margin;
 
+
+    private Tile _clickedTile;
+    private Tile _targetTile;
+
     private void Start()
     {
         SetupTiles();
@@ -114,4 +118,42 @@ public class Board : MonoBehaviour
         }
     }
     #endregion
+
+    #region MouseInput
+
+    public void ClickTile(Tile tile)
+    {
+        if (!_clickedTile)
+        {
+            _clickedTile = tile;
+        }
+    }
+
+    public void DragToTile(Tile tile)
+    {
+        if (_clickedTile)
+        {
+            _targetTile = tile;
+        }
+    }
+
+    public void ReleaseTile()
+    {
+        if (_clickedTile && _targetTile)
+        {
+            SwitchTiles(_clickedTile, _targetTile);
+        }
+    }
+
+    void SwitchTiles(Tile clickedTile, Tile targetTile)
+    {
+        Vector3 clickedtilePos = new Vector3(clickedTile.xIndex, clickedTile.yIndex, 0);
+
+        //Switch them.
+
+        _clickedTile = null;
+        _targetTile = null;
+    }
+
+#endregion
 }
