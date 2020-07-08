@@ -13,14 +13,16 @@ public class Board : MonoBehaviour
 
     //2D Array that will hold the arrays
     Tile[,] allTiles;
+    GamePiece[,] allGamePieces;
 
+  public  GameObject[] gamePiecePrefabs;
 
     public int margin;
 
     private void Start()
     {
         SetupTiles();
-
+        SetupGamePieces();
         //TODO Instead let the tiles know the camera
         SetupCamera();
     }
@@ -71,4 +73,45 @@ public class Board : MonoBehaviour
             }
         }
     }
+
+    #region GamePieces
+    private void SetupGamePieces()
+    {
+        allGamePieces = new GamePiece[width, height];
+        FillRandom();
+    }
+    private GameObject GetRandomGamePiece()
+    {
+        int randomIndex = Random.Range(0, gamePiecePrefabs.Length);
+
+        while (!gamePiecePrefabs[randomIndex])
+        {
+             randomIndex = Random.Range(0, gamePiecePrefabs.Length);
+
+        }
+        return gamePiecePrefabs[randomIndex];
+    }
+
+    private void PlaceGamePiece(GamePiece piece, int x, int y)
+    {
+
+        piece.transform.position = new Vector3(x, y, 0);
+        piece.transform.rotation = Quaternion.identity;
+        piece.SetCoordinates(x, y);
+    }
+
+    private void FillRandom()
+    {
+        for (int i = 0; i < width; i++)
+        {
+
+            for (int j = 0; j < height; j++)
+            {
+                GameObject randomPiece = Instantiate(GetRandomGamePiece());
+                PlaceGamePiece(randomPiece.GetComponent<GamePiece>(), i, j);
+            }
+
+        }
+    }
+    #endregion
 }
